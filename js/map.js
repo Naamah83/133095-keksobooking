@@ -8,7 +8,7 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var COUNT = 8;
 
-var arrs = [];
+var pinsDataArray = [];
 
 var map = document.querySelector('.map');
 
@@ -29,7 +29,7 @@ var getOffersArr = function () {
     var locationX = getRandomValue(300, 900);
     var locationY = getRandomValue(100, 500);
 
-    arrs[i] = {
+    pinsDataArray[i] = {
       author: {
         avatar: 'img/avatars/user' + getNonrepeatingRandomValue(AVATAR) + '.png'
       },
@@ -52,33 +52,33 @@ var getOffersArr = function () {
       }
     };
   }
-  return arrs;
+  return pinsDataArray;
 };
 
-var renderPin = function (arr) {
+var renderPin = function (pinData) {
   var pinElement = pinsTemplate.cloneNode(true);
-  pinElement.style.left = arr.location.x + 20;
-  pinElement.style.top = arr.location.y + 40;
-  pinElement.querySelector('img').src = arr.author.avatar;
+  pinElement.style.left = pinData.location.x + 20 + 'px';
+  pinElement.style.top = pinData.location.y + 40 + 'px';
+  pinElement.querySelector('img').src = pinData.author.avatar;
   return pinElement;
 };
 
 var renderAllPins = function () {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arrs.length; i++) {
-    fragment.appendChild(renderPin(arrs[i]));
+  for (var i = 0; i < pinsDataArray.length; i++) {
+    fragment.appendChild(renderPin(pinsDataArray[i]));
   }
   return fragment;
 };
 
-var renderArr = function (arr) {
+var renderCard = function (pinData) {
   var arrElement = cardTemplate.cloneNode(true);
-  arrElement.querySelector('.map__card h3').textContent = arr.offer.title;
-  arrElement.querySelector('.map__card p small').textContent = arr.offer.address;
-  arrElement.querySelector('.popup__price').textContent = arr.offer.price + ' ₽/ночь';
+  arrElement.querySelector('.map__card h3').textContent = pinData.offer.title;
+  arrElement.querySelector('.map__card p small').textContent = pinData.offer.address;
+  arrElement.querySelector('.popup__price').textContent = pinData.offer.price + ' ₽/ночь';
 
   var socialType;
-  switch (arr.offer.type) {
+  switch (pinData.offer.type) {
     case 'flat':
       socialType = 'Квартира';
       break;
@@ -95,7 +95,7 @@ var renderArr = function (arr) {
   var endForRooms = '';
   var endForGuests = '';
 
-  switch (arr.offer.rooms) {
+  switch (pinData.offer.rooms) {
     case 1:
       endForRooms = 'комната';
       break;
@@ -107,7 +107,7 @@ var renderArr = function (arr) {
       break;
   }
 
-  switch (arr.offer.guests) {
+  switch (pinData.offer.guests) {
     case 1:
       endForGuests = 'гостя';
       break;
@@ -116,27 +116,27 @@ var renderArr = function (arr) {
       break;
   }
 
-  arrElement.querySelector('.map__card h4 + p').textContent = arr.offer.rooms + ' ' + endForRooms + ' для ' + arr.offer.guests + ' ' + endForGuests;
-  arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout;
+  arrElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
+  arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
 
   arrElement.querySelectorAll('.feature').forEach(function (item) {
     arrElement.querySelector('.popup__features').removeChild(item);
   });
 
-  arr.offer.features.forEach(function (featureItem) {
+  pinData.offer.features.forEach(function (featureItem) {
     var featuresItem = document.createElement('li');
     featuresItem.classList.add('feature', 'feature--' + featureItem);
     arrElement.querySelector('.popup__features').appendChild(featuresItem);
   });
 
-  arrElement.querySelector('.map__card ul + p').textContent = arr.offer.description;
-  arrElement.querySelector('.popup__avatar').src = arr.author.avatar;
+  arrElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
+  arrElement.querySelector('.popup__avatar').src = pinData.author.avatar;
   return arrElement;
 };
 
 map.classList.remove('map--faded');
 
-var arr = getOffersArr();
-pins.appendChild(renderAllPins(arr));
-var arrCard = renderArr(arr[0]);
+var pinData = getOffersArr();
+pins.appendChild(renderAllPins(pinData));
+var arrCard = renderCard(pinData[0]);
 map.insertBefore(arrCard, document.querySelector('map__filters-container'));
