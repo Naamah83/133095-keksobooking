@@ -58,7 +58,7 @@ var getOffersArr = function () {
 var renderPin = function (pinData) {
   var pinElement = pinsTemplate.cloneNode(true);
   pinElement.style.left = pinData.location.x + 20 + 'px';
-  pinElement.style.top = pinData.location.y + 40 + 'px';
+  pinElement.style.top = pinData.location.y + 62 + 'px';
   pinElement.querySelector('img').src = pinData.author.avatar;
   return pinElement;
 };
