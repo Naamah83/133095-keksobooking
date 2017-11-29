@@ -71,13 +71,15 @@ var renderAllPins = function () {
   return fragment;
 };
 
-function getFeaturesString(features) {
-  var featuresStr = '';
-  features.forEach(function (item) {
-    featuresStr += '<li class="feature feature--' + item + '"></li>';
-  });
-  return featuresStr;
-}
+var fillFeatures = function (pinData, arrElement) {
+  var featureListItems = arrElement.querySelectorAll('.feature');
+  for (var i = 0; i < featureListItems.length; i++) {
+    featureListItems[i].classList.add('hidden');
+  }
+  for (i = 0; i < pinData.offer.features.length; i++) {
+    arrElement.querySelector('.feature--' + pinData.offer.features[i]).classList.remove('hidden');
+  }
+};
 
 var renderCard = function (pinData) {
   var arrElement = cardTemplate.cloneNode(true);
@@ -126,7 +128,7 @@ var renderCard = function (pinData) {
 
   arrElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
   arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
-  arrElement.querySelector('.popup__features').innerHTML = getFeaturesString(pinData.offer.features);
+  fillFeatures(pinData, arrElement);
   arrElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
   arrElement.querySelector('.popup__avatar').src = pinData.author.avatar;
   return arrElement;
