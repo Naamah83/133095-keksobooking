@@ -71,6 +71,14 @@ var renderAllPins = function () {
   return fragment;
 };
 
+function getFeaturesString(features) {
+  var featuresStr = '';
+  features.forEach(function (item) {
+    featuresStr += '<li class="feature feature--' + item + '"></li>';
+  });
+  return featuresStr;
+}
+
 var renderCard = function (pinData) {
   var arrElement = cardTemplate.cloneNode(true);
   arrElement.querySelector('.map__card h3').textContent = pinData.offer.title;
@@ -118,17 +126,7 @@ var renderCard = function (pinData) {
 
   arrElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
   arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
-
-  arrElement.querySelectorAll('.feature').forEach(function (item) {
-    arrElement.querySelector('.popup__features').removeChild(item);
-  });
-
-  pinData.offer.features.forEach(function (featureItem) {
-    var featuresItem = document.createElement('li');
-    featuresItem.classList.add('feature', 'feature--' + featureItem);
-    arrElement.querySelector('.popup__features').appendChild(featuresItem);
-  });
-
+  arrElement.querySelector('.popup__features').innerHTML = getFeaturesString(pinData.offer.features);
   arrElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
   arrElement.querySelector('.popup__avatar').src = pinData.author.avatar;
   return arrElement;
