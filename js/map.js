@@ -73,16 +73,6 @@ var renderAllPins = function () {
 
 var featureListItems = document.querySelectorAll('.feature');
 
-var fillFeatures = function (pinData) {
-  for (var i = 0; i < featureListItems.length; i++) {
-    featureListItems[i].classList.add('hidden');
-  }
-  for (var j = 0; j < pinData.offer.features.length; j++) {
-    featureListItems[j].querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
-  }
-  return featureListItems;
-};
-
 var renderCard = function (pinData) {
   var arrElement = cardTemplate.cloneNode(true);
   arrElement.querySelector('.map__card h3').textContent = pinData.offer.title;
@@ -130,11 +120,20 @@ var renderCard = function (pinData) {
 
   arrElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
   arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
-
-  fillFeatures();
-
   arrElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
   arrElement.querySelector('.popup__avatar').src = pinData.author.avatar;
+
+  var fillFeatures = function () {
+    for (var i = 0; i < featureListItems.length; i++) {
+      featureListItems[i].classList.add('hidden');
+    }
+    for (var j = 0; j < pinData.offer.features; j++) {
+      arrElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
+    }
+    return featureListItems;
+  };
+  fillFeatures();
+
   return arrElement;
 };
 
