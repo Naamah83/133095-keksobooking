@@ -71,10 +71,11 @@ var renderAllPins = function () {
   return fragment;
 };
 
-var featureListItems = document.querySelectorAll('.feature');
+
+var arrElement = cardTemplate.cloneNode(true);
+var featureListItems = arrElement.querySelectorAll('.feature');
 
 var renderCard = function (pinData) {
-  var arrElement = cardTemplate.cloneNode(true);
   arrElement.querySelector('.map__card h3').textContent = pinData.offer.title;
   arrElement.querySelector('.map__card p small').textContent = pinData.offer.address;
   arrElement.querySelector('.popup__price').textContent = pinData.offer.price + ' ₽/ночь';
@@ -127,13 +128,12 @@ var renderCard = function (pinData) {
     for (var i = 0; i < featureListItems.length; i++) {
       featureListItems[i].classList.add('hidden');
     }
-    for (var j = 0; j < pinData.offer.features; j++) {
+    for (var j = 0; j < pinData.offer.features.length; j++) {
       arrElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
     }
     return featureListItems;
   };
   fillFeatures();
-
   return arrElement;
 };
 
