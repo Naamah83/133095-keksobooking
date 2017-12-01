@@ -71,8 +71,8 @@ var renderAllPins = function () {
   return fragment;
 };
 
-
 var arrElement = cardTemplate.cloneNode(true);
+map.insertBefore(arrElement, document.querySelector('map__filters-container'));
 var featureListItems = arrElement.querySelectorAll('.feature');
 
 var renderCard = function (pinData) {
@@ -131,15 +131,12 @@ var renderCard = function (pinData) {
     for (var j = 0; j < pinData.offer.features.length; j++) {
       arrElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
     }
-    return featureListItems;
   };
   fillFeatures();
-  return arrElement;
 };
 
 map.classList.remove('map--faded');
 
 var pinData = getOffersArr();
 pins.appendChild(renderAllPins(pinData));
-var arrCard = renderCard(pinData[0]);
-map.insertBefore(arrCard, document.querySelector('map__filters-container'));
+renderCard(pinData[0]);
