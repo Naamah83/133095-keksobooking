@@ -75,13 +75,13 @@ var cardElement = cardTemplate.cloneNode(true);
 var featureListItems = cardElement.querySelectorAll('.feature');
 
 var fillFeatures = function (pinData) {
-    for (var i = 0; i < featureListItems.length; i++) {
-      featureListItems[i].classList.add('hidden');
-    }
-    for (var j = 0; j < pinData.offer.features.length; j++) {
-      cardElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
-    }
-  };
+  for (var i = 0; i < featureListItems.length; i++) {
+    featureListItems[i].classList.add('hidden');
+  }
+  for (var j = 0; j < pinData.offer.features.length; j++) {
+    cardElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
+  }
+};
 
 var renderCard = function (pinData) {
   cardElement.querySelector('.map__card h3').textContent = pinData.offer.title;
