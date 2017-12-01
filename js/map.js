@@ -16,6 +16,9 @@ var pins = document.querySelector('.map__pins');
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var pinsTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
+var cardElement = cardTemplate.cloneNode(true);
+var featureListItems = cardElement.querySelectorAll('.feature');
+
 var getRandomValue = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -70,9 +73,6 @@ var renderAllPins = function () {
   }
   return fragment;
 };
-
-var cardElement = cardTemplate.cloneNode(true);
-var featureListItems = cardElement.querySelectorAll('.feature');
 
 var fillFeatures = function (pinData) {
   for (var i = 0; i < featureListItems.length; i++) {
