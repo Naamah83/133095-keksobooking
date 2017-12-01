@@ -71,29 +71,37 @@ var renderAllPins = function () {
   return fragment;
 };
 
-var arrElement = cardTemplate.cloneNode(true);
-map.insertBefore(arrElement, document.querySelector('map__filters-container'));
-var featureListItems = arrElement.querySelectorAll('.feature');
+var cardElement = cardTemplate.cloneNode(true);
+var featureListItems = cardElement.querySelectorAll('.feature');
+
+var fillFeatures = function (pinData) {
+    for (var i = 0; i < featureListItems.length; i++) {
+      featureListItems[i].classList.add('hidden');
+    }
+    for (var j = 0; j < pinData.offer.features.length; j++) {
+      cardElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
+    }
+  };
 
 var renderCard = function (pinData) {
-  arrElement.querySelector('.map__card h3').textContent = pinData.offer.title;
-  arrElement.querySelector('.map__card p small').textContent = pinData.offer.address;
-  arrElement.querySelector('.popup__price').textContent = pinData.offer.price + ' ₽/ночь';
+  cardElement.querySelector('.map__card h3').textContent = pinData.offer.title;
+  cardElement.querySelector('.map__card p small').textContent = pinData.offer.address;
+  cardElement.querySelector('.popup__price').textContent = pinData.offer.price + ' ₽/ночь';
 
-  var socialType;
+  var housingType;
   switch (pinData.offer.type) {
     case 'flat':
-      socialType = 'Квартира';
+      housingType = 'Квартира';
       break;
     case 'house':
-      socialType = 'Дом';
+      housingType = 'Дом';
       break;
     case 'bungalo':
-      socialType = 'Бунгало';
+      housingType = 'Бунгало';
       break;
   }
 
-  arrElement.querySelector('.map__card h4').textContent = socialType;
+  cardElement.querySelector('.map__card h4').textContent = housingType;
 
   var endForRooms = '';
   var endForGuests = '';
@@ -119,20 +127,11 @@ var renderCard = function (pinData) {
       break;
   }
 
-  arrElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
-  arrElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
-  arrElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
-  arrElement.querySelector('.popup__avatar').src = pinData.author.avatar;
-
-  var fillFeatures = function () {
-    for (var i = 0; i < featureListItems.length; i++) {
-      featureListItems[i].classList.add('hidden');
-    }
-    for (var j = 0; j < pinData.offer.features.length; j++) {
-      arrElement.querySelector('.feature--' + pinData.offer.features[j]).classList.remove('hidden');
-    }
-  };
-  fillFeatures();
+  cardElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
+  cardElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
+  cardElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
+  cardElement.querySelector('.popup__avatar').src = pinData.author.avatar;
+  fillFeatures(pinData);
 };
 
 map.classList.remove('map--faded');
@@ -140,3 +139,4 @@ map.classList.remove('map--faded');
 var pinData = getOffersArr();
 pins.appendChild(renderAllPins(pinData));
 renderCard(pinData[0]);
+map.insertBefore(cardElement, document.querySelector('map__filters-container'));
