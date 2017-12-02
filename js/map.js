@@ -15,7 +15,6 @@ var map = document.querySelector('.map');
 var pins = document.querySelector('.map__pins');
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var pinsTemplate = document.querySelector('template').content.querySelector('.map__pin');
-
 var cardElement = cardTemplate.cloneNode(true);
 var featureListItems = cardElement.querySelectorAll('.feature');
 
@@ -134,9 +133,74 @@ var renderCard = function (pinData) {
   fillFeatures(pinData);
 };
 
-map.classList.remove('map--faded');
-
 var pinData = getOffersArr();
 pins.appendChild(renderAllPins(pinData));
 renderCard(pinData[0]);
 map.insertBefore(cardElement, document.querySelector('map__filters-container'));
+
+var ESC_KEYCODE = 27;
+var mapPinMain = document.querySelector('.map__pin--main');
+var noticeForm = document.querySelector('.notice__form');
+var popup = document.querySelector('.popup');
+var popupClose = document.querySelector('.popup__close');
+
+var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
+noticeFormFieldsets.forEach(function (elem) {
+  elem.disabled = true;
+});
+
+var hideElement = function (elem) {
+  elem.classList.add('hidden');
+};
+
+var showElement = function (elem) {
+  elem.classList.remove('hidden');
+};
+
+var removeActivePins = function (arr) {
+  arr.forEach(function (elem) {
+    elem.classList.remove('map__pin--active');
+  });
+};
+
+var onPopupEsc = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+mapPins.forEach(function (elem) {
+  hideElement(elem);
+});
+
+hideElement(popup);
+
+var activateMap = function () {
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+  noticeFormFieldsets.forEach(function (elem) {
+    elem.disabled = false;
+  });
+
+  mapPins.forEach(function (elem) {
+    showElement(elem);
+
+    elem.addEventListener('click', function () {
+      removeActivePins(mapPins);
+      showElement(popup);
+      elem.classList.add('map__pin--active');
+      document.addEventListener('keydown', onPopupEsc);
+    });
+  });
+};
+
+mapPinMain.addEventListener('mouseup', activateMap);
+
+var closePopup = function () {
+  hideElement(popup);
+  removeActivePins(mapPins);
+
+  document.removeEventListener('keydown', onPopupEsc);
+};
+popupClose.addEventListener('click', closePopup);
