@@ -183,14 +183,14 @@ var activateMap = function () {
     elem.disabled = false;
   });
 
-  mapPins.forEach(function (elem) {
+  mapPins.forEach(function (elem, i) {
     showElement(elem);
 
     elem.addEventListener('click', function () {
       removeActivePins(mapPins);
       showElement(popup);
       elem.classList.add('map__pin--active');
-      renderCard(pinsDataArray[0]);
+      renderCard(pinsDataArray[i]);
       document.addEventListener('keydown', onPopupEsc);
     });
   });
