@@ -139,7 +139,7 @@ renderCard(pinData[0]);
 map.insertBefore(cardElement, document.querySelector('map__filters-container'));
 
 var ESC_KEYCODE = 27;
-var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinMain = map.querySelector('.map__pin--main');
 var noticeForm = document.querySelector('.notice__form');
 var popup = document.querySelector('.popup');
 var popupClose = document.querySelector('.popup__close');
@@ -190,6 +190,7 @@ var activateMap = function () {
       removeActivePins(mapPins);
       showElement(popup);
       elem.classList.add('map__pin--active');
+      renderCard(pinsDataArray[0]);
       document.addEventListener('keydown', onPopupEsc);
     });
   });
