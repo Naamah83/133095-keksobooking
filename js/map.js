@@ -157,24 +157,26 @@ var showElement = function (elem) {
   elem.classList.remove('hidden');
 };
 
-var removeActivePins = function (arr) {
-  arr.forEach(function (elem) {
-    elem.classList.remove('map__pin--active');
-  });
+var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+mapPins.forEach(function (elem) {
+  hideElement(elem);
+});
+
+var removeActivePins = function (elem) {
+  if (mapPins) {
+    mapPins.classList.remove('map__pin--active');
+  }
+  mapPins = elem;
+  elem.classList.add('map__pin--active');
 };
+
+hideElement(popup);
 
 var onPopupEsc = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
   }
 };
-
-var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-mapPins.forEach(function (elem) {
-  hideElement(elem);
-});
-
-hideElement(popup);
 
 var activateMap = function () {
   map.classList.remove('map--faded');
@@ -187,9 +189,8 @@ var activateMap = function () {
     showElement(elem);
 
     elem.addEventListener('click', function () {
-      removeActivePins(mapPins);
+      removeActivePins();
       showElement(popup);
-      elem.classList.add('map__pin--active');
       renderCard(pinsDataArray[i]);
       document.addEventListener('keydown', onPopupEsc);
     });
@@ -200,7 +201,7 @@ mapPinMain.addEventListener('mouseup', activateMap);
 
 var closePopup = function () {
   hideElement(popup);
-  removeActivePins(mapPins);
+  removeActivePins();
 
   document.removeEventListener('keydown', onPopupEsc);
 };
