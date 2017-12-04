@@ -162,13 +162,13 @@ mapPins.forEach(function (elem) {
   hideElement(elem);
 });
 
-var activePins;
+var activePin;
 
 var removeActivePins = function (elem) {
-  if (activePins) {
-    activePins.classList.remove('map__pin--active');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
   }
-  activePins = elem;
+  activePin = elem;
   elem.classList.add('map__pin--active');
 };
 
