@@ -162,11 +162,13 @@ mapPins.forEach(function (elem) {
   hideElement(elem);
 });
 
+var activePins;
+
 var removeActivePins = function (elem) {
-  if (mapPins) {
-    mapPins.classList.remove('map__pin--active');
+  if (activePins) {
+    activePins.classList.remove('map__pin--active');
   }
-  mapPins = elem;
+  activePins = elem;
   elem.classList.add('map__pin--active');
 };
 
@@ -189,7 +191,7 @@ var activateMap = function () {
     showElement(elem);
 
     elem.addEventListener('click', function () {
-      removeActivePins();
+      removeActivePins(elem);
       showElement(popup);
       renderCard(pinsDataArray[i]);
       document.addEventListener('keydown', onPopupEsc);
