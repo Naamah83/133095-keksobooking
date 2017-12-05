@@ -208,3 +208,87 @@ var closePopup = function () {
   document.removeEventListener('keydown', onPopupEsc);
 };
 popupClose.addEventListener('click', closePopup);
+
+var address = noticeForm.querySelector('#address');
+var title = noticeForm.querySelector('#title');
+var type = noticeForm.querySelector('#type');
+var timeIn = noticeForm.querySelector('#timein');
+var timeOut = noticeForm.querySelector('#timeout');
+var price = noticeForm.querySelector('#price');
+var rooms = noticeForm.querySelector('#room_number');
+var guests = noticeForm.querySelector('#capacity');
+
+timeIn.addEventListener('change', function () {
+  timeOut.value = timeIn.value;
+});
+
+timeOut.addEventListener('change', function () {
+  timeIn.value = timeOut.value;
+});
+
+type.addEventListener('change', function () {
+  switch (type.value) {
+    case 'bungalo':
+      price.min = 0;
+      break;
+    case 'flat':
+      price.min = 1000;
+      break;
+    case 'house':
+      price.min = 5000;
+      break;
+    case 'palace':
+      price.min = 10000;
+      break;
+    default:
+      price.min = 0;
+  }
+});
+
+rooms.addEventListener('change', function () {
+  switch (rooms.value) {
+    case '1':
+      guests.value = 1;
+      break;
+    case '2':
+      guests.value = 2;
+      break;
+    case '3':
+      guests.value = 3;
+      break;
+    case '100':
+      guests.value = 0;
+      break;
+    default:
+      guests.value = 1;
+  }
+});
+
+var formValidation = function (target) {
+  target.style.borderColor = '#ed1313';
+
+  if (target.validity.tooShort) {
+    target.setCustomValidity('Поле не должно содержать меньше ' + target.minLength + ' символов');
+  } else if (target.validity.tooLong) {
+    target.setCustomValidity('Поле не должно содержать больше ' + target.maxLength + ' символов');
+  } else if (target.validity.rangeUnderflow || target.validity.rangeOverflow) {
+    target.setCustomValidity('Число должно быть больше ' + target.min + ' и меньше ' + target.max);
+  } else if (target.validity.valueMissing) {
+    target.setCustomValidity('Это обязательное поле');
+  } else {
+    target.style.borderColor = '#b6bbc2';
+    target.setCustomValidity('');
+  }
+};
+
+address.addEventListener('invalid', function () {
+  formValidation(address);
+});
+
+title.addEventListener('invalid', function () {
+  formValidation(title);
+});
+
+price.addEventListener('invalid', function () {
+  formValidation(price);
+});
