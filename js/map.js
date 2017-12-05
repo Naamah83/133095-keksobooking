@@ -209,6 +209,7 @@ var closePopup = function () {
 };
 popupClose.addEventListener('click', closePopup);
 
+
 var address = noticeForm.querySelector('#address');
 var title = noticeForm.querySelector('#title');
 var type = noticeForm.querySelector('#type');
@@ -216,7 +217,14 @@ var timeIn = noticeForm.querySelector('#timein');
 var timeOut = noticeForm.querySelector('#timeout');
 var price = noticeForm.querySelector('#price');
 var rooms = noticeForm.querySelector('#room_number');
-var guests = noticeForm.querySelector('#capacity');
+var optionsRooms = rooms.querySelectorAll('option');
+var capacity = noticeForm.querySelector('#capacity');
+var optionsCapacity = capacity.querySelectorAll('option');
+
+var minPriceForBungalo = 0;
+var minPriceForFlat = 1000;
+var minPriceForHouse = 5000;
+var minPriceForPalace = 10000;
 
 timeIn.addEventListener('change', function () {
   timeOut.value = timeIn.value;
@@ -226,42 +234,63 @@ timeOut.addEventListener('change', function () {
   timeIn.value = timeOut.value;
 });
 
-type.addEventListener('change', function () {
-  switch (type.value) {
-    case 'bungalo':
-      price.min = 0;
-      break;
-    case 'flat':
-      price.min = 1000;
-      break;
-    case 'house':
-      price.min = 5000;
-      break;
-    case 'palace':
-      price.min = 10000;
-      break;
-    default:
-      price.min = 0;
+type.addEventListener('change', changePriceFromType);
+
+function changePriceFromType(event) {
+  if (event.target.value === 'bungalo') {
+    price.setAttribute('min', minPriceForBungalo);
+    price.value = minPriceForBungalo;
+  } else if (event.target.value === 'flat') {
+    price.setAttribute('min', minPriceForFlat);
+    price.value = minPriceForFlat;
+  } else if (event.target.value === 'house') {
+    price.setAttribute('min', minPriceForHouse);
+    price.value = minPriceForHouse;
+  } else if (event.target.value === 'palace') {
+    price.setAttribute('min', minPriceForPalace);
+    price.value = minPriceForPalace;
   }
-});
+}
+
+var changeCapacityFromRooms = function () {
+  for (var i = 0; i < optionsCapacity.length; i++) {
+    optionsCapacity[i].disabled = false;
+  }
+
+  for (var j = 0; j < optionsRooms.length; j++) {
+
+    if (optionsRooms[j].selected === true) {
+      switch (optionsRooms[j].value) {
+        case '1':
+          optionsCapacity[2].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[1].disabled = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '2':
+          optionsCapacity[1].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '3':
+          optionsCapacity[0].selected = true;
+          optionsCapacity[3].disabled = true;
+          break;
+        case '100':
+          optionsCapacity[3].selected = true;
+          optionsCapacity[0].disabled = true;
+          optionsCapacity[1].disabled = true;
+          optionsCapacity[2].disabled = true;
+          break;
+      }
+    }
+  }
+};
+
+changeCapacityFromRooms();
 
 rooms.addEventListener('change', function () {
-  switch (rooms.value) {
-    case '1':
-      guests.value = 1;
-      break;
-    case '2':
-      guests.value = 2;
-      break;
-    case '3':
-      guests.value = 3;
-      break;
-    case '100':
-      guests.value = 0;
-      break;
-    default:
-      guests.value = 1;
-  }
+  changeCapacityFromRooms();
 });
 
 var formValidation = function (target) {
