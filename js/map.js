@@ -217,9 +217,7 @@ var timeIn = noticeForm.querySelector('#timein');
 var timeOut = noticeForm.querySelector('#timeout');
 var price = noticeForm.querySelector('#price');
 var rooms = noticeForm.querySelector('#room_number');
-var optionsRooms = rooms.querySelectorAll('option');
 var capacity = noticeForm.querySelector('#capacity');
-var optionsCapacity = capacity.querySelectorAll('option');
 
 var minPriceForBungalo = 0;
 var minPriceForFlat = 1000;
@@ -234,63 +232,44 @@ timeOut.addEventListener('change', function () {
   timeIn.value = timeOut.value;
 });
 
-type.addEventListener('change', changePriceFromType);
-
-function changePriceFromType(event) {
-  if (event.target.value === 'bungalo') {
-    price.setAttribute('min', minPriceForBungalo);
-    price.value = minPriceForBungalo;
-  } else if (event.target.value === 'flat') {
-    price.setAttribute('min', minPriceForFlat);
-    price.value = minPriceForFlat;
-  } else if (event.target.value === 'house') {
-    price.setAttribute('min', minPriceForHouse);
-    price.value = minPriceForHouse;
-  } else if (event.target.value === 'palace') {
-    price.setAttribute('min', minPriceForPalace);
-    price.value = minPriceForPalace;
-  }
-}
-
-var changeCapacityFromRooms = function () {
-  for (var i = 0; i < optionsCapacity.length; i++) {
-    optionsCapacity[i].disabled = false;
-  }
-
-  for (var j = 0; j < optionsRooms.length; j++) {
-
-    if (optionsRooms[j].selected === true) {
-      switch (optionsRooms[j].value) {
-        case '1':
-          optionsCapacity[2].selected = true;
-          optionsCapacity[0].disabled = true;
-          optionsCapacity[1].disabled = true;
-          optionsCapacity[3].disabled = true;
-          break;
-        case '2':
-          optionsCapacity[1].selected = true;
-          optionsCapacity[0].disabled = true;
-          optionsCapacity[3].disabled = true;
-          break;
-        case '3':
-          optionsCapacity[0].selected = true;
-          optionsCapacity[3].disabled = true;
-          break;
-        case '100':
-          optionsCapacity[3].selected = true;
-          optionsCapacity[0].disabled = true;
-          optionsCapacity[1].disabled = true;
-          optionsCapacity[2].disabled = true;
-          break;
-      }
-    }
+var changePriceFromType = function () {
+  switch (type.value) {
+    case 'bungalo':
+      price.value = minPriceForBungalo;
+      break;
+    case 'flat':
+      price.value = minPriceForFlat;
+      break;
+    case 'house':
+      price.value = minPriceForHouse;
+      break;
+    case 'palace':
+      price.value = minPriceForPalace;
+      break;
   }
 };
 
-changeCapacityFromRooms();
+type.addEventListener('change', changePriceFromType);
+
+
+var changeCapacityFromRooms = function () {
+  var roomsNumber = rooms.value;
+  var guestsNumbers = capacity.options;
+
+  for (var i = 0; i < guestsNumbers.length; i++) {
+    if (roomsNumber === '100') {
+      guestsNumbers[i].disabled = guestsNumbers[i].value !== '100';
+      capacity.value = '0';
+    } else {
+      guestsNumbers[i].disabled = (guestsNumbers[i].value > roomsNumber || guestsNumbers[i].value === '0');
+      capacity.value = roomsNumber;
+    }
+  }
+  return capacity;
+};
 
 rooms.addEventListener('change', function () {
-  changeCapacityFromRooms();
+  changeCapacityFromRooms(rooms, capacity);
 });
 
 var formValidation = function (target) {
