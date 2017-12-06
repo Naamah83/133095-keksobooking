@@ -219,11 +219,6 @@ var price = noticeForm.querySelector('#price');
 var rooms = noticeForm.querySelector('#room_number');
 var capacity = noticeForm.querySelector('#capacity');
 
-var minPriceForBungalo = 0;
-var minPriceForFlat = 1000;
-var minPriceForHouse = 5000;
-var minPriceForPalace = 10000;
-
 timeIn.addEventListener('change', function () {
   timeOut.value = timeIn.value;
 });
@@ -232,25 +227,12 @@ timeOut.addEventListener('change', function () {
   timeIn.value = timeOut.value;
 });
 
-var changePriceFromType = function () {
-  switch (type.value) {
-    case 'bungalo':
-      price.value = minPriceForBungalo;
-      break;
-    case 'flat':
-      price.value = minPriceForFlat;
-      break;
-    case 'house':
-      price.value = minPriceForHouse;
-      break;
-    case 'palace':
-      price.value = minPriceForPalace;
-      break;
-  }
-};
+var minPrices = {bungalo: 0, flat: 1000, house: 5000, palace: 10000};
 
-type.addEventListener('change', changePriceFromType);
-
+type.addEventListener('change', function (evt) {
+  var target = evt.target;
+  price.value = minPrices[target.value];
+});
 
 var changeCapacityFromRooms = function () {
   var roomsNumber = rooms.value;
@@ -265,7 +247,6 @@ var changeCapacityFromRooms = function () {
       capacity.value = roomsNumber;
     }
   }
-  return capacity;
 };
 
 rooms.addEventListener('change', function () {
