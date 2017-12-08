@@ -15,12 +15,13 @@
 
   var renderAllPins = function () {
     var fragment = document.createDocumentFragment();
-      for (var i = 0; i < pinsDataArray.length; i++) {
-        fragment.appendChild(renderPin(pinsDataArray[i]));
-      }
-      return fragment;
+    for (var i = 0; i < pinsDataArray.length; i++) {
+      fragment.appendChild(renderPin(pinsDataArray[i]));
     }
-  }
+    return fragment;
+  };
+
+  var activePin;
 
   var removeActivePins = function (elem) {
     if (activePin) {
@@ -30,7 +31,7 @@
     elem.classList.add('map__pin--active');
   };
 
-  window.pin = function(pinData) {
+  window.pin = function (pinData) {
     renderPin(pinData);
     removeActivePins();
   };

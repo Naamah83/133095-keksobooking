@@ -6,7 +6,6 @@ window.card = (function () {
   var cardElement = cardTemplate.cloneNode(true);
   var featureListItems = cardElement.querySelectorAll('.feature');
 
-  var popup = document.querySelector('.popup');
   var popupClose = document.querySelector('.popup__close');
   var ESC_KEYCODE = 27;
 
@@ -80,7 +79,7 @@ window.card = (function () {
     elem.classList.remove('hidden');
   };
 
-  hideElement(popup);
+  hideElement(cardTemplate);
 
   var onPopupEsc = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -89,8 +88,7 @@ window.card = (function () {
   };
 
   var closePopup = function () {
-    hideElement(popup);
-    window.pin();
+    hideElement(cardTemplate);
 
     document.removeEventListener('keydown', onPopupEsc);
   };

@@ -10,15 +10,12 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
 
-  var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
+  var noticeFormFieldsets = noticeForm.querySelectorAll('.fieldset');
   noticeFormFieldsets.forEach(function (elem) {
     elem.disabled = true;
   });
 
   var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  mapPins.forEach(function (elem) {
-    window.card(elem);
-  });
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -32,7 +29,7 @@
 
       elem.addEventListener('click', function () {
         window.pin(elem);
-        window.card(popup);
+        window.card(cardTemplate);
         window.card(window.pin[i]);
         document.addEventListener('keydown', onPopupEsc);
       });
