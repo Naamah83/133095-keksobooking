@@ -19,7 +19,7 @@
     return array.splice(Math.floor(Math.random() * array.length), 1);
   };
 
-  window.data = function () {
+  var getOffersArr = function () {
     for (var i = 0; i < COUNT; i++) {
       var locationX = getRandomValue(300, 900);
       var locationY = getRandomValue(100, 500);
@@ -47,6 +47,7 @@
         }
       };
     }
-  }();
-  window.data = pinsDataArray;
+    return pinsDataArray;
+  };
+  window.data = getOffersArr();
 })();
