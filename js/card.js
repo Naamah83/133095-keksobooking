@@ -1,6 +1,6 @@
 'use strict';
 
-window.card = (function () {
+(function () {
 
   var map = document.querySelector('.map');
   var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
@@ -68,6 +68,8 @@ window.card = (function () {
     cardElement.querySelector('.popup__avatar').src = pinData.author.avatar;
     fillFeatures(pinData);
   };
-  var pinData = window.data;
-  renderCard(pinData[0]);
+
+  window.card = {
+    renderCard: renderCard
+  };
 })();

@@ -3,23 +3,23 @@
 (function () {
 
   var map = document.querySelector('.map');
-  // var pins = document.querySelector('.map__pins');
-  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
-  var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
   var popupClose = document.querySelector('.popup__close');
+  var card = document.querySelector('.map__card');
   var ESC_KEYCODE = 27;
 
   var renderAllPins = function () {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < window.data.length; i++) {
-      fragment.appendChild(window.pin(window.data[i]));
+      fragment.appendChild(window.pin.renderPin(window.data[i]));
     }
     return fragment;
   };
 
-  mapPins.appendChild(renderAllPins(window.data));
+  map.appendChild(renderAllPins());
+
+  var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
 
   noticeFormFieldsets.forEach(function (elem) {
     elem.disabled = true;
@@ -33,7 +33,13 @@
     elem.classList.remove('hidden');
   };
 
-  hideElement(window.card);
+  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+  mapPins.forEach(function (elem) {
+    hideElement(elem);
+  });
+
+  hideElement(card);
 
   var onPopupEsc = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -42,7 +48,7 @@
   };
 
   var closePopup = function () {
-    hideElement(window.card);
+    hideElement(card);
     document.removeEventListener('keydown', onPopupEsc);
   };
 
@@ -59,11 +65,10 @@
       showElement(elem);
 
       elem.addEventListener('click', function () {
-        window.pin.removeActivePins(mapPins);
-        window.card(window.data[i]);
-        showElement(window.card);
-        elem.classList.add('map__pin--active');
-        document.addEventListener('keydown', window.card.onPopupEsc);
+        window.pin.removeActivePins(elem);
+        window.card.renderCard(window.data[i]);
+        showElement(card);
+        document.addEventListener('keydown', onPopupEsc);
       });
     });
   };

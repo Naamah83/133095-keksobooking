@@ -23,8 +23,8 @@
     elem.classList.add('map__pin--active');
   };
 
-  window.pin = function (pinData) {
-    renderPin(pinData);
-    removeActivePins();
+  window.pin = {
+    renderPin: renderPin,
+    removeActivePins: removeActivePins
   };
 })();
