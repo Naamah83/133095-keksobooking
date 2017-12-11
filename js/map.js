@@ -7,6 +7,13 @@
   var noticeForm = document.querySelector('.notice__form');
   var popupClose = document.querySelector('.popup__close');
   var card = document.querySelector('.map__card');
+  var address = document.querySelector('#address');
+  var body = document.querySelector('body');
+
+  var limitYTop = 100;
+  var limitYBottom = 500;
+  var limitXLeft = body.offsetLeft;
+  var limitXRight = body.offsetLeft + body.offsetWidth;
   var ESC_KEYCODE = 27;
 
   var renderAllPins = function () {
@@ -49,6 +56,7 @@
 
   var closePopup = function () {
     hideElement(card);
+    window.pin.removeActivePins();
     document.removeEventListener('keydown', onPopupEsc);
   };
 
@@ -74,4 +82,57 @@
   };
 
   mapPinMain.addEventListener('mouseup', activateMap);
+
+  mapPinMain.addEventListener('mousedown', function (event) {
+    event.preventDefault();
+
+    var startCoords = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    var onMouseMove = function (moveEvent) {
+      moveEvent.preventDefault();
+      var shift = {
+        x: startCoords.x - moveEvent.clientX,
+        y: startCoords.y - moveEvent.clientY
+      };
+      startCoords = {
+        x: moveEvent.clientX,
+        y: moveEvent.clientY
+      };
+
+      var pinPointY = mapPinMain.offsetTop - shift.y;
+      var pinPointX = mapPinMain.offsetLeft - shift.x;
+
+      if (pinPointY > limitYBottom) {
+        pinPointY = limitYBottom;
+      } else if (pinPointY < limitYTop) {
+        pinPointY = limitYTop;
+      } else {
+        pinPointY = mapPinMain.offsetTop - shift.y;
+      }
+
+      if (pinPointX > limitXRight) {
+        pinPointX = limitXRight;
+      } else if (pinPointX < limitXLeft) {
+        pinPointX = limitXLeft;
+      } else {
+        pinPointX = mapPinMain.offsetLeft - shift.x;
+      }
+
+      mapPinMain.style.top = pinPointY + 'px';
+      mapPinMain.style.left = pinPointX + 'px';
+
+      address.value = pinPointX + ', ' + pinPointY;
+    };
+
+    var onMouseUp = function (upEvent) {
+      upEvent.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
