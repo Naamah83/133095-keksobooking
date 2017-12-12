@@ -15,16 +15,20 @@
 
   var activePin;
 
-  var removeActivePins = function (elem) {
+  var selectPin = function (elem) {
+    elem.classList.add('map__pin--active');
+    activePin = elem;
+  };
+
+  var deselectPin = function () {
     if (activePin) {
       activePin.classList.remove('map__pin--active');
     }
-    activePin = elem;
-    elem.classList.add('map__pin--active');
   };
 
   window.pin = {
     renderPin: renderPin,
-    removeActivePins: removeActivePins
+    deselectPin: deselectPin,
+    selectPin: selectPin
   };
 })();
