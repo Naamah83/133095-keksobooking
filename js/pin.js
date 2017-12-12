@@ -16,14 +16,12 @@
   var activePin;
 
   var selectPin = function (elem) {
-    if (activePin) {
-      elem.classList.add('map__pin--active');
-    }
+    elem.classList.add('map__pin--active');
     activePin = elem;
   };
 
   var deselectPin = function () {
-    if (activePin !== null) {
+    if (activePin) {
       activePin.classList.remove('map__pin--active');
     }
   };

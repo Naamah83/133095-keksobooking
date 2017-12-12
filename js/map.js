@@ -73,6 +73,7 @@
       showElement(elem);
 
       elem.addEventListener('click', function () {
+        window.pin.deselectPin();
         window.pin.selectPin(elem);
         window.card.renderCard(window.data[i]);
         showElement(card);
