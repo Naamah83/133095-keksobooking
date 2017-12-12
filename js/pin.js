@@ -13,18 +13,24 @@
     return pinElement;
   };
 
-  var activePin;
-
-  var removeActivePins = function (elem) {
+  var addActivePins = function (elem) {
+    var activePin = document.querySelector('.map__pin--active');
     if (activePin) {
+      activePin.classList.toggle('map__pin--active');
+    }
+    elem.classList.add('map__pin--active');
+  };
+
+  var removeActivePins = function () {
+    var activePin = document.querySelector('.map__pin--active');
+    if (activePin !== null) {
       activePin.classList.remove('map__pin--active');
     }
-    activePin = elem;
-    elem.classList.add('map__pin--active');
   };
 
   window.pin = {
     renderPin: renderPin,
-    removeActivePins: removeActivePins
+    removeActivePins: removeActivePins,
+    addActivePins: addActivePins
   };
 })();

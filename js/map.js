@@ -73,7 +73,7 @@
       showElement(elem);
 
       elem.addEventListener('click', function () {
-        window.pin.removeActivePins(elem);
+        window.pin.addActivePins(elem);
         window.card.renderCard(window.data[i]);
         showElement(card);
         document.addEventListener('keydown', onPopupEsc);
