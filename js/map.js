@@ -56,7 +56,7 @@
 
   var closePopup = function () {
     hideElement(card);
-    window.pin.removeActivePins();
+    window.pin.deselectPin();
     document.removeEventListener('keydown', onPopupEsc);
   };
 
@@ -73,7 +73,7 @@
       showElement(elem);
 
       elem.addEventListener('click', function () {
-        window.pin.addActivePins(elem);
+        window.pin.selectPin(elem);
         window.card.renderCard(window.data[i]);
         showElement(card);
         document.addEventListener('keydown', onPopupEsc);

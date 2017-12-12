@@ -15,15 +15,14 @@
 
   var activePin;
 
-  var addActivePins = function (elem) {
+  var selectPin = function (elem) {
     if (activePin) {
-      activePin.classList.remove('map__pin--active');
+      elem.classList.add('map__pin--active');
     }
     activePin = elem;
-    elem.classList.add('map__pin--active');
   };
 
-  var removeActivePins = function () {
+  var deselectPin = function () {
     if (activePin !== null) {
       activePin.classList.remove('map__pin--active');
     }
@@ -31,7 +30,7 @@
 
   window.pin = {
     renderPin: renderPin,
-    removeActivePins: removeActivePins,
-    addActivePins: addActivePins
+    deselectPin: deselectPin,
+    selectPin: selectPin
   };
 })();
