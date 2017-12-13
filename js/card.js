@@ -69,7 +69,23 @@
     fillFeatures(pinData);
   };
 
+  var ESC_KEYCODE = 27;
+
+  var onPopupEsc = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopup();
+    }
+  };
+
+  var closePopup = function () {
+    cardTemplate.classList.add('hidden');
+    window.pin.deselectPin();
+    document.removeEventListener('keydown', onPopupEsc);
+  };
+
   window.card = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    onPopupEsc: onPopupEsc,
+    closePopup: closePopup
   };
 })();

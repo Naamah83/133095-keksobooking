@@ -12,9 +12,8 @@
 
   var limitYTop = 100;
   var limitYBottom = 500;
-  var limitXLeft = body.offsetLeft;
-  var limitXRight = body.offsetLeft + body.offsetWidth;
-  var ESC_KEYCODE = 27;
+  var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
+  var limitXRight = body.offsetLeft - 35 + body.offsetWidth; // 35 - ширина метки чтобы вся была на карте
 
   var renderAllPins = function () {
     var fragment = document.createDocumentFragment();
@@ -36,10 +35,6 @@
     elem.classList.add('hidden');
   };
 
-  var showElement = function (elem) {
-    elem.classList.remove('hidden');
-  };
-
   var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
   mapPins.forEach(function (elem) {
@@ -48,19 +43,7 @@
 
   hideElement(card);
 
-  var onPopupEsc = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
-    }
-  };
-
-  var closePopup = function () {
-    hideElement(card);
-    window.pin.deselectPin();
-    document.removeEventListener('keydown', onPopupEsc);
-  };
-
-  popupClose.addEventListener('click', closePopup);
+  popupClose.addEventListener('click', window.card.closePopup);
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -69,17 +52,7 @@
       elem.disabled = false;
     });
 
-    mapPins.forEach(function (elem, i) {
-      showElement(elem);
-
-      elem.addEventListener('click', function () {
-        window.pin.deselectPin();
-        window.pin.selectPin(elem);
-        window.card.renderCard(window.data[i]);
-        showElement(card);
-        document.addEventListener('keydown', onPopupEsc);
-      });
-    });
+    mapPins.forEach(window.showCard);
   };
 
   mapPinMain.addEventListener('mouseup', activateMap);
