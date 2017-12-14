@@ -6,7 +6,6 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
   var popupClose = document.querySelector('.popup__close');
-  var card = document.querySelector('.map__card');
   var address = document.querySelector('#address');
   var body = document.querySelector('body');
 
@@ -31,6 +30,10 @@
     elem.disabled = true;
   });
 
+  var showElement = function (elem) {
+    elem.classList.remove('hidden');
+  };
+
   var hideElement = function (elem) {
     elem.classList.add('hidden');
   };
@@ -41,7 +44,7 @@
     hideElement(elem);
   });
 
-  hideElement(card);
+  hideElement(window.card.popup);
 
   popupClose.addEventListener('click', window.card.closePopup);
 
@@ -52,7 +55,16 @@
       elem.disabled = false;
     });
 
-    mapPins.forEach(window.showCard);
+    mapPins.forEach(function (elem, obj) {
+      showElement(elem);
+
+      elem.addEventListener('click', function () {
+        window.pin.deselectPin();
+        window.pin.selectPin(elem);
+        window.showCard(obj);
+        document.addEventListener('keydown', window.card.onPopupEsc);
+      });
+    });
   };
 
   mapPinMain.addEventListener('mouseup', activateMap);
