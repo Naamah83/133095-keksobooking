@@ -44,7 +44,7 @@
     hideElement(elem);
   });
 
-  hideElement(window.card.popup);
+  window.card.closePopup();
 
   popupClose.addEventListener('click', window.card.closePopup);
 

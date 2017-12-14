@@ -84,10 +84,15 @@
     document.removeEventListener('keydown', onPopupEsc);
   };
 
+  var showPopup = function () {
+    popup.classList.remove('hidden');
+  };
+
   window.card = {
     renderCard: renderCard,
     onPopupEsc: onPopupEsc,
     closePopup: closePopup,
+    showPopup: showPopup,
     popup: popup
   };
 })();
