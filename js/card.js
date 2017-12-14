@@ -92,7 +92,6 @@
     renderCard: renderCard,
     onPopupEsc: onPopupEsc,
     closePopup: closePopup,
-    showPopup: showPopup,
-    popup: popup
+    showPopup: showPopup
   };
 })();
