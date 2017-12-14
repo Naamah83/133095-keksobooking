@@ -6,15 +6,13 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
   var popupClose = document.querySelector('.popup__close');
-  var card = document.querySelector('.map__card');
   var address = document.querySelector('#address');
   var body = document.querySelector('body');
 
   var limitYTop = 100;
   var limitYBottom = 500;
-  var limitXLeft = body.offsetLeft;
-  var limitXRight = body.offsetLeft + body.offsetWidth;
-  var ESC_KEYCODE = 27;
+  var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
+  var limitXRight = body.offsetLeft - 35 + body.offsetWidth; // 35 - ширина метки чтобы вся была на карте
 
   var renderAllPins = function () {
     var fragment = document.createDocumentFragment();
@@ -32,12 +30,12 @@
     elem.disabled = true;
   });
 
-  var hideElement = function (elem) {
-    elem.classList.add('hidden');
-  };
-
   var showElement = function (elem) {
     elem.classList.remove('hidden');
+  };
+
+  var hideElement = function (elem) {
+    elem.classList.add('hidden');
   };
 
   var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -46,21 +44,9 @@
     hideElement(elem);
   });
 
-  hideElement(card);
+  window.card.closePopup();
 
-  var onPopupEsc = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
-    }
-  };
-
-  var closePopup = function () {
-    hideElement(card);
-    window.pin.deselectPin();
-    document.removeEventListener('keydown', onPopupEsc);
-  };
-
-  popupClose.addEventListener('click', closePopup);
+  popupClose.addEventListener('click', window.card.closePopup);
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -69,15 +55,14 @@
       elem.disabled = false;
     });
 
-    mapPins.forEach(function (elem, i) {
+    mapPins.forEach(function (elem, obj) {
       showElement(elem);
 
       elem.addEventListener('click', function () {
         window.pin.deselectPin();
         window.pin.selectPin(elem);
-        window.card.renderCard(window.data[i]);
-        showElement(card);
-        document.addEventListener('keydown', onPopupEsc);
+        window.showCard(obj);
+        document.addEventListener('keydown', window.card.onPopupEsc);
       });
     });
   };

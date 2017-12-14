@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+
+  var TIME_VALUES = ['12:00', '13:00', '14:00'];
+  var TYPE_VALUES = ['flat', 'bungalo', 'house', 'palace'];
+  var MIN_PRICE_VALUES = [1000, 0, 5000, 10000];
+  var ROOMS = ['1', '2', '3', '100'];
+  var GUESTS = ['1', '2', '3', '0'];
+
   var noticeForm = document.querySelector('.notice__form');
   var address = noticeForm.querySelector('#address');
   var title = noticeForm.querySelector('#title');
@@ -11,21 +18,14 @@
   var rooms = noticeForm.querySelector('#room_number');
   var capacity = noticeForm.querySelector('#capacity');
 
-  timeIn.addEventListener('change', function () {
-    timeOut.value = timeIn.value;
-  });
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
 
-  timeOut.addEventListener('change', function () {
-    timeIn.value = timeOut.value;
-  });
-
-  var minPrices = {bungalo: 0, flat: 1000, house: 5000, palace: 10000};
-
-  type.addEventListener('change', function (evt) {
-    var target = evt.target;
-    price.min = minPrices[type.value];
-    price.value = minPrices[target.value];
-  });
+  var syncPrices = function (element, value) {
+    element.value = value;
+    element.min = value;
+  };
 
   var changeCapacityFromRooms = function () {
     var roomsNumber = rooms.value;
@@ -42,9 +42,22 @@
     }
   };
 
+  timeIn.addEventListener('change', function () {
+    window.synchronizeFields(timeIn, timeOut, TIME_VALUES, TIME_VALUES, syncValues);
+  }, true);
+
+  timeOut.addEventListener('change', function () {
+    window.synchronizeFields(timeOut, timeIn, TIME_VALUES, TIME_VALUES, syncValues);
+  }, true);
+
+  type.addEventListener('change', function () {
+    window.synchronizeFields(type, price, TYPE_VALUES, MIN_PRICE_VALUES, syncPrices);
+  }, true);
+
   rooms.addEventListener('change', function () {
+    window.synchronizeFields(rooms, capacity, ROOMS, GUESTS, syncValues);
     changeCapacityFromRooms(rooms, capacity);
-  });
+  }, true);
 
   var formValidation = function (target) {
     target.style.borderColor = '#ed1313';
@@ -74,4 +87,7 @@
   price.addEventListener('invalid', function () {
     formValidation(price);
   });
+
+  window.synchronizeFields(rooms, capacity, ROOMS, GUESTS, syncValues);
+  changeCapacityFromRooms(rooms, capacity);
 })();

@@ -2,6 +2,7 @@
 
 (function () {
 
+  var ESC_KEYCODE = 27;
   var map = document.querySelector('.map');
   var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
@@ -69,7 +70,28 @@
     fillFeatures(pinData);
   };
 
+  var popup = document.querySelector('.map__card');
+
+  var onPopupEsc = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopup();
+    }
+  };
+
+  var closePopup = function () {
+    popup.classList.add('hidden');
+    window.pin.deselectPin();
+    document.removeEventListener('keydown', onPopupEsc);
+  };
+
+  var showPopup = function () {
+    popup.classList.remove('hidden');
+  };
+
   window.card = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    onPopupEsc: onPopupEsc,
+    closePopup: closePopup,
+    showPopup: showPopup
   };
 })();
