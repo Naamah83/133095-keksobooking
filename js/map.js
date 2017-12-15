@@ -6,7 +6,6 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
   var popupClose = document.querySelector('.popup__close');
-  var address = document.querySelector('#address');
   var body = document.querySelector('body');
 
   var limitYTop = 100;
@@ -110,7 +109,7 @@
       mapPinMain.style.top = pinPointY + 'px';
       mapPinMain.style.left = pinPointX + 'px';
 
-      address.value = pinPointX + ', ' + pinPointY;
+      window.form.address.value = pinPointX + ', ' + pinPointY;
     };
 
     var onMouseUp = function (upEvent) {

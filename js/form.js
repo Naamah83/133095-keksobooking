@@ -17,6 +17,8 @@
   var price = noticeForm.querySelector('#price');
   var rooms = noticeForm.querySelector('#room_number');
   var capacity = noticeForm.querySelector('#capacity');
+  var description = noticeForm.querySelector('#description');
+  var image = noticeForm.querySelector('#images');
 
   var syncValues = function (element, value) {
     element.value = value;
@@ -40,6 +42,19 @@
         capacity.value = roomsNumber;
       }
     }
+  };
+
+  var resetForm = function () {
+    title.value = '';
+    address.value = '';
+    type.value = 'flat';
+    price.value = '1000';
+    timeIn.value = '12:00';
+    timeOut.value = '12:00';
+    rooms.value = '1';
+    capacity.value = '1';
+    description.value = '';
+    image.value = '';
   };
 
   timeIn.addEventListener('change', function () {
@@ -76,6 +91,11 @@
     }
   };
 
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.errorHandler);
+    evt.preventDefault();
+  }, true);
+
   address.addEventListener('invalid', function () {
     formValidation(address);
   });
@@ -88,6 +108,15 @@
     formValidation(price);
   });
 
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.errorHandler);
+    evt.preventDefault();
+  }, true);
+
   window.synchronizeFields(rooms, capacity, ROOMS, GUESTS, syncValues);
   changeCapacityFromRooms(rooms, capacity);
+
+  window.form = {
+    address: address
+  };
 })();
