@@ -13,25 +13,19 @@
   var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
   var limitXRight = body.offsetLeft - 35 + body.offsetWidth; // 35 - ширина метки чтобы вся была на карте
 
-  var renderAllPins = function () {
+  var renderAllPins = function (data) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.length; i++) {
-      fragment.appendChild(window.pin.renderPin(window.data[i]));
+    for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(window.pin.renderPin(data[i]));
     }
-    return fragment;
+    map.appendChild(fragment);
   };
-
-  map.appendChild(renderAllPins());
 
   var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
 
   noticeFormFieldsets.forEach(function (elem) {
     elem.disabled = true;
   });
-
-  var showElement = function (elem) {
-    elem.classList.remove('hidden');
-  };
 
   var hideElement = function (elem) {
     elem.classList.add('hidden');
@@ -47,26 +41,30 @@
 
   popupClose.addEventListener('click', window.card.closePopup);
 
-  var activateMap = function () {
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
-    noticeFormFieldsets.forEach(function (elem) {
-      elem.disabled = false;
-    });
+  var successHandler = function (data) {
 
-    mapPins.forEach(function (elem, obj) {
-      showElement(elem);
-
-      elem.addEventListener('click', function () {
-        window.pin.deselectPin();
-        window.pin.selectPin(elem);
-        window.showCard(obj);
-        document.addEventListener('keydown', window.card.onPopupEsc);
+    var activateMap = function () {
+      map.classList.remove('map--faded');
+      renderAllPins(data);
+      noticeForm.classList.remove('notice__form--disabled');
+      noticeFormFieldsets.forEach(function (elem) {
+        elem.disabled = false;
       });
-    });
+
+      mapPins.forEach(function (elem) {
+
+        elem.addEventListener('click', function () {
+          window.pin.deselectPin();
+          window.pin.selectPin(elem);
+          window.showCard(data);
+          document.addEventListener('keydown', window.card.onPopupEsc);
+        });
+      });
+    };
+    mapPinMain.addEventListener('mouseup', activateMap);
   };
 
-  mapPinMain.addEventListener('mouseup', activateMap);
+  window.backend.load(successHandler, window.backend.errorHandler);
 
   mapPinMain.addEventListener('mousedown', function (event) {
     event.preventDefault();
