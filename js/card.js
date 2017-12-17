@@ -7,7 +7,6 @@
   var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
   var featureListItems = cardElement.querySelectorAll('.feature');
-  var pictureListItems = cardElement.querySelector('.popup__pictures');
 
   map.insertBefore(cardElement, document.querySelector('map__filters-container'));
 
@@ -67,14 +66,7 @@
     cardElement.querySelector('.map__card h4 + p').textContent = pinData.offer.rooms + ' ' + endForRooms + ' для ' + pinData.offer.guests + ' ' + endForGuests;
     cardElement.querySelector('.map__card p:nth-of-type(4)').textContent = 'Заезд после ' + pinData.offer.checkin + ', выезд до ' + pinData.offer.checkout;
     cardElement.querySelector('.map__card ul + p').textContent = pinData.offer.description;
-
-    pictureListItems.innerHTML = '';
-    for (var i = 0; i < pinData.offer.photos.length; i++) {
-      var photoElement = '<li style="margin-right: 3px"><img src="' + pinData.offer.photos[i] + '" width = "42" height="42" ></li>';
-      pictureListItems.insertAdjacentHTML('afterbegin', photoElement);
-    }
     cardElement.querySelector('.popup__avatar').src = pinData.author.avatar;
-
     fillFeatures(pinData);
   };
 

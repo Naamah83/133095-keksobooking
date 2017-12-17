@@ -13,6 +13,20 @@
   var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
   var limitXRight = body.offsetLeft - 35 + body.offsetWidth; // 35 - ширина метки чтобы вся была на карте
 
+  var renderAllPins = function (data) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(window.pin.renderPin(data[i]));
+    }
+    map.appendChild(fragment);
+  };
+
+  var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
+
+  noticeFormFieldsets.forEach(function (elem) {
+    elem.disabled = true;
+  });
+
   var successHandler = function (data) {
 
     var activateMap = function () {
@@ -22,6 +36,8 @@
       noticeFormFieldsets.forEach(function (elem) {
         elem.disabled = false;
       });
+
+      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
       mapPins.forEach(function (elem) {
 
@@ -37,30 +53,6 @@
   };
 
   window.backend.load(successHandler, window.backend.errorHandler);
-
-  var renderAllPins = function (data) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
-      fragment.appendChild(window.pin.renderPin(data[i]));
-    }
-    map.appendChild(fragment);
-  };
-
-  var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
-
-  noticeFormFieldsets.forEach(function (elem) {
-    elem.disabled = true;
-  });
-
-  var hideElement = function (elem) {
-    elem.classList.add('hidden');
-  };
-
-  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-  mapPins.forEach(function (elem) {
-    hideElement(elem);
-  });
 
   window.card.closePopup();
 
