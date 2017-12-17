@@ -13,6 +13,31 @@
   var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
   var limitXRight = body.offsetLeft - 35 + body.offsetWidth; // 35 - ширина метки чтобы вся была на карте
 
+  var successHandler = function (data) {
+
+    var activateMap = function () {
+      map.classList.remove('map--faded');
+      renderAllPins(data);
+      noticeForm.classList.remove('notice__form--disabled');
+      noticeFormFieldsets.forEach(function (elem) {
+        elem.disabled = false;
+      });
+
+      mapPins.forEach(function (elem) {
+
+        elem.addEventListener('click', function () {
+          window.pin.deselectPin();
+          window.pin.selectPin(elem);
+          window.showCard(data);
+          document.addEventListener('keydown', window.card.onPopupEsc);
+        });
+      });
+    };
+    mapPinMain.addEventListener('mouseup', activateMap);
+  };
+
+  window.backend.load(successHandler, window.backend.errorHandler);
+
   var renderAllPins = function (data) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
@@ -40,31 +65,6 @@
   window.card.closePopup();
 
   popupClose.addEventListener('click', window.card.closePopup);
-
-  var successHandler = function (data) {
-
-    var activateMap = function () {
-      map.classList.remove('map--faded');
-      renderAllPins(data);
-      noticeForm.classList.remove('notice__form--disabled');
-      noticeFormFieldsets.forEach(function (elem) {
-        elem.disabled = false;
-      });
-
-      mapPins.forEach(function (elem) {
-
-        elem.addEventListener('click', function () {
-          window.pin.deselectPin();
-          window.pin.selectPin(elem);
-          window.showCard(data);
-          document.addEventListener('keydown', window.card.onPopupEsc);
-        });
-      });
-    };
-    mapPinMain.addEventListener('mouseup', activateMap);
-  };
-
-  window.backend.load(successHandler, window.backend.errorHandler);
 
   mapPinMain.addEventListener('mousedown', function (event) {
     event.preventDefault();
