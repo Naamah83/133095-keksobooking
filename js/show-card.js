@@ -1,5 +1,5 @@
 'use strict';
-window.showCard = function (data) {
-  window.card.renderCard(data);
+window.showCard = function (pinData) {
+  window.card.renderCard(pinData);
   window.card.showPopup();
 };

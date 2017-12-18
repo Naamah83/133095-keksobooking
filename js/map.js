@@ -39,12 +39,12 @@
 
       var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-      mapPins.forEach(function (elem) {
+      mapPins.forEach(function (elem, index) {
 
         elem.addEventListener('click', function () {
           window.pin.deselectPin();
           window.pin.selectPin(elem);
-          window.showCard(data);
+          window.showCard(data[index]);
           document.addEventListener('keydown', window.card.onPopupEsc);
         });
       });
