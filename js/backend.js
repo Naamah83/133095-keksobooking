@@ -12,14 +12,14 @@
     500: 'Ошибка сервера'
   };
 
-  var setup = function (onSuccess, onError) {
+  var setup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === CODE_SUCSESS) {
-        onSuccess(xhr.response);
+        onLoad(xhr.response);
       } else {
         onError(ErrorMessages[xhr.status]);
       }
@@ -37,15 +37,15 @@
   };
 
   window.backend = {
-    load: function (onSuccess, onError) {
-      var xhr = setup(onSuccess, onError);
+    load: function (onLoad, onError) {
+      var xhr = setup(onLoad, onError);
 
       xhr.open('GET', SERVER_URL + '/data');
       xhr.send();
     },
 
-    save: function (data, onSuccess, onError) {
-      var xhr = setup(onSuccess, onError);
+    save: function (data, onLoad, onError) {
+      var xhr = setup(onLoad, onError);
 
       xhr.open('POST', SERVER_URL);
       xhr.send(data);
