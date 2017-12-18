@@ -42,6 +42,10 @@
     }
   };
 
+  var resetForm = function () {
+    noticeForm.reset();
+  };
+
   timeIn.addEventListener('change', function () {
     window.synchronizeFields(timeIn, timeOut, TIME_VALUES, TIME_VALUES, syncValues);
   }, true);
@@ -88,6 +92,15 @@
     formValidation(price);
   });
 
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.errorHandler);
+    evt.preventDefault();
+  }, true);
+
   window.synchronizeFields(rooms, capacity, ROOMS, GUESTS, syncValues);
   changeCapacityFromRooms(rooms, capacity);
+
+  window.form = {
+    address: address
+  };
 })();
