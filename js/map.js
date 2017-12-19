@@ -8,6 +8,18 @@
   var popupClose = document.querySelector('.popup__close');
   var body = document.querySelector('body');
 
+  var filterForm = document.querySelector('.map__filters');
+  var typeHousing = document.querySelector('#housing-type');
+  var priceHousing = document.querySelector('#housing-price');
+  var roomsHousing = document.querySelector('#housing-rooms');
+  var guestsHousing = document.querySelector('#housing-guests');
+  var featuresHousing = document.querySelectorAll('#housing-features input[type="checkbox"]');
+  var copyData = [];
+
+  var PRICE_FROM = 10000;
+  var PRICE_TO = 50000;
+  var PIN_COUNT = 5;
+
   var limitYTop = 100;
   var limitYBottom = 500;
   var limitXLeft = body.offsetLeft + 280; // 280 - ширина popup с отступами, чтобы метка не пряталась за popup
@@ -15,7 +27,8 @@
 
   var renderAllPins = function (data) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
+    var pinCount = data.length > PIN_COUNT ? PIN_COUNT : data.length;
+    for (var i = 0; i < pinCount; i++) {
       fragment.appendChild(window.pin.renderPin(data[i]));
     }
     map.appendChild(fragment);
@@ -28,6 +41,7 @@
   });
 
   var successHandler = function (data) {
+    copyData = data.slice();
 
     var activateMap = function () {
       map.classList.remove('map--faded');
@@ -55,8 +69,71 @@
   window.backend.load(successHandler, window.backend.errorHandler);
 
   window.card.closePopup();
-
   popupClose.addEventListener('click', window.card.closePopup);
+
+  var updatePins = function () {
+    var filteredData = copyData;
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    window.pin.removeAllPins(mapPins);
+
+    var selectFilter = function (control, type) {
+      if (control.value !== 'any') {
+        filteredData = filteredData.filter(function (pinData) {
+          return pinData.offer[type].toString() === control.value;
+        });
+      }
+      return filteredData;
+    };
+
+    var rangeFilter = function (control) {
+      filteredData = filteredData.filter(function (pinData) {
+        switch (control.value) {
+          case 'low':
+            return pinData.offer.price <= PRICE_FROM;
+          case 'middle':
+            return pinData.offer.price > PRICE_FROM && pinData.offer.price < PRICE_TO;
+          case 'high':
+            return pinData.offer.price >= PRICE_TO;
+          default:
+            return true;
+        }
+      });
+      return filteredData;
+    };
+
+    var checkboxFilter = function (controls) {
+      controls.forEach(function (elem) {
+        if (elem.checked) {
+          filteredData = filteredData.filter(function (pinData) {
+            return pinData.offer.features.indexOf(elem.value) !== -1;
+          });
+        }
+      });
+      return filteredData;
+    };
+
+    selectFilter(typeHousing, 'type');
+    rangeFilter(priceHousing);
+    selectFilter(roomsHousing, 'rooms');
+    selectFilter(guestsHousing, 'guests');
+    checkboxFilter(featuresHousing);
+
+    renderAllPins(filteredData);
+
+    mapPins.forEach(function (elem) {
+
+      elem.addEventListener('click', function () {
+        window.pin.deselectPin();
+        window.pin.selectPin(elem);
+        window.showCard(filteredData);
+        document.addEventListener('keydown', window.card.onPopupEsc);
+      });
+    });
+  };
+
+  filterForm.addEventListener('change', function () {
+    window.debounce(updatePins);
+  });
 
   mapPinMain.addEventListener('mousedown', function (event) {
     event.preventDefault();

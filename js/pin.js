@@ -26,9 +26,16 @@
     }
   };
 
+  var removeAllPins = function (arr) {
+    arr.forEach(function (elem) {
+      elem.remove();
+    });
+  };
+
   window.pin = {
     renderPin: renderPin,
     deselectPin: deselectPin,
-    selectPin: selectPin
+    selectPin: selectPin,
+    removeAllPins: removeAllPins
   };
 })();
