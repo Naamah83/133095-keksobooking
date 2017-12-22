@@ -3,7 +3,7 @@
 (function () {
 
   var pinsTemplate = document.querySelector('template').content.querySelector('.map__pin');
-
+  var activePin;
 
   var renderPin = function (pinData) {
     var pinElement = pinsTemplate.cloneNode(true);
@@ -12,8 +12,6 @@
     pinElement.querySelector('img').src = pinData.author.avatar;
     return pinElement;
   };
-
-  var activePin;
 
   var selectPin = function (elem) {
     elem.classList.add('map__pin--active');

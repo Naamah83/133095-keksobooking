@@ -2,6 +2,10 @@
 
 (function () {
 
+  var PRICE_FROM = 10000;
+  var PRICE_TO = 50000;
+  var PIN_COUNT = 5;
+
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
@@ -14,11 +18,7 @@
   var roomsHousing = document.querySelector('#housing-rooms');
   var guestsHousing = document.querySelector('#housing-guests');
   var featuresHousing = document.querySelectorAll('#housing-features input[type="checkbox"]');
-  var copyData = [];
-
-  var PRICE_FROM = 10000;
-  var PRICE_TO = 50000;
-  var PIN_COUNT = 5;
+  var copyDatas = [];
 
   var limitYTop = 100;
   var limitYBottom = 500;
@@ -41,7 +41,7 @@
   });
 
   var successHandler = function (data) {
-    copyData = data.slice();
+    copyDatas = data.slice();
 
     var activateMap = function () {
       map.classList.remove('map--faded');
@@ -67,7 +67,7 @@
   };
 
   var updatePins = function () {
-    var filteredData = copyData;
+    var filteredData = copyDatas;
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     window.pin.removeAllPins(mapPins);
 
@@ -112,6 +112,7 @@
     selectFilter(roomsHousing, 'rooms');
     selectFilter(guestsHousing, 'guests');
     checkboxFilter(featuresHousing);
+
     renderAllPins(filteredData);
 
     window.card.closePopup();
