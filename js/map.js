@@ -66,11 +66,6 @@
     mapPinMain.addEventListener('mouseup', activateMap);
   };
 
-  window.backend.load(successHandler, window.backend.errorHandler);
-
-  window.card.closePopup();
-  popupClose.addEventListener('click', window.card.closePopup);
-
   var updatePins = function () {
     var filteredData = copyData;
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -117,23 +112,31 @@
     selectFilter(roomsHousing, 'rooms');
     selectFilter(guestsHousing, 'guests');
     checkboxFilter(featuresHousing);
-
     renderAllPins(filteredData);
 
-    mapPins.forEach(function (elem) {
+    window.card.closePopup();
 
+    var newPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    newPins.forEach(function (elem, index) {
       elem.addEventListener('click', function () {
         window.pin.deselectPin();
         window.pin.selectPin(elem);
-        window.showCard(filteredData);
+        window.showCard(filteredData[index]);
         document.addEventListener('keydown', window.card.onPopupEsc);
       });
     });
   };
 
+  window.backend.load(successHandler, window.backend.errorHandler);
+
   filterForm.addEventListener('change', function () {
     window.debounce(updatePins);
   });
+
+  window.card.closePopup();
+  popupClose.addEventListener('click', window.card.closePopup);
+
 
   mapPinMain.addEventListener('mousedown', function (event) {
     event.preventDefault();
